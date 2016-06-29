@@ -1,24 +1,26 @@
-#!\usr\bin\perl
+#!usr/bin/perl
 
-my $filename1 = $ARGV[0];
-my $filename2 = $ARGV[1];
-open FILE1, $filename1 or die $!;
-open FILE2, $filename2 or die $!;
-
-@arr1=<FILE1>;
-@arr2=<FILE2>;
-$index=0;
-foreach $n (@arr2) {
-	chomp($n);
-	@counter[$n] = 0;
-	$i = 0;
-	do {
-		if(@arr1[$i] == $n) { 
-   			@counter[$n]++;
-	 	}
-   		$i++;
-	} while($i < scalar(@arr1));
-	@out[$index++] =  $n . ' ' . @counter[$n] . "\n";
+my ($filename1, $filename2) = @ARGV;
+if (not defined $filename2) {
+    die "You must specify two filenames.\n";
 }
-chomp(@out[scalar(@out)-1]);
+open FILE1, '<', $filename1 or die "Could not open ". $filename1;
+open FILE2, '<', $filename2 or die "Could not open ". $filename2;
+@arr=<FILE1>;
+$index=0;
+foreach $num (<FILE2>) {
+    last if(chomp $num == 0);
+    chomp $num;
+    $count{$num} = 0;
+    $i=0;
+    do{
+        if(@arr[$i] == $num) {
+            $count{$num}++;
+        }
+        $i++;
+    } while($i < scalar(@arr) && @arr[$i] != 0);
+    if($num != 0) {
+        @out[$index++] =  $num . ' ' . $count{$num} . "\n";
+    }
+}
 print @out;

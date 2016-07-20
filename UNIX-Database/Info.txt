@@ -1,5 +1,5 @@
 This perl script implements a primitive expert system, by accepting rules and queries from STDIN and printing the results to STDOUT.
-Currently, the script is configured to create/read from a database file named "memory.db".
+Currently, the script is configured to create/read from a database file named "memory".
 
 Rules:
 'Key' is a(n) 'Value'.

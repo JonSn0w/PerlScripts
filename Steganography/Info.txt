@@ -1,0 +1,10 @@
+Description:
+This program decodes the "secret" ASCII text messages hidden within uncompressed 24-bit .bmp image files, including the two provided 'test.bmp' files.
+
+Hiding the messages:
+The ASCII messages are hidden by first clearing(setting to 0) the least-significant bit of each RGB-byte within the image. Then the messages are encoded into the image by converting each character into 8 bits, and surrounding them by "start" and "stop" bits, which will both be set to 1. 
+In the future, I hope to also add a complementary script to perform this process of message encoding.
+
+Check:
+When functioning correctly, the 'test1.bmp' should return the phrase "Hello, World!".
+

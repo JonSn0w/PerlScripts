@@ -9,36 +9,29 @@ read BMP, my $bmp, -s $filename;  # read file into $bmp
 my $width = unpack("L", substr($bmp, 18, 4)); 
 my $offset = unpack("L", substr($bmp, 10, 4));
 
-my @val;
-my $flag;
-my $index = $offset;
-while($index < length($bmp)) {      # get least sig bits of rgb bytes
-    my $rgb = unpack("CCC", substr($bmp, $index));
-    my $lsb = substr(sprintf ("%08b", $rgb), 7, 1);
-    $flag = 1 if($lsb eq '1');
-    push @val, $lsb if defined $flag;
-    $index += 1;
-}
-
 my $byte;
 my $i = 0;
-foreach my $n(@val) {
-    if($i % 10 == 0) {
-        $i-- if $n ==0;
+my $index = $offset;
+while($index < length($bmp)) {
+    my $rgb = unpack("CCC", substr($bmp, $index));
+    my $lsb = substr(sprintf ("%08b", $rgb), 7, 1);    # get least sig bits of rgb bytes 
+    if($i % 10 == 0) {    # identify valid "start" bits
+        $i-- if $lsb ==0;    
         $byte="";
-    } elsif($i % 10 == 9) {
-        if($n == 1) {
+    } elsif($i % 10 == 9) {   
+        if($lsb == 1) {    # identify valid "stop" bits
             my $chars = length($byte);
             my @msg = pack("B$chars", $byte);
             print @msg;
         } else {
-            while(substr($byte, 0, 1) eq "0") {
+            while(substr($byte, 0) eq "0") {    # cycle until valid "start" & "stop" bits  
                 $byte = substr($byte, 1, length($byte)-1);
             }
             $i = length($byte);
         }
     } else {
-        $byte = $byte."$n";
+        $byte = $byte."$lsb";
     }
-   $i++;
+    $i++;
+    $index++;
 }

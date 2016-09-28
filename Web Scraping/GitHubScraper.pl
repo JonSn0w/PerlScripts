@@ -1,16 +1,16 @@
 #!/usr/bin/perl
-# use strict; 
-# use warnings; 
+# use strict;
+# use warnings;
 use HTML::Parser;
 
 my @fill;
 my @date;
 my @contrib;
-my $url = 'https://github.com/JonSn0w'; 
+my $url = 'https://github.com/JonSn0w';
 printf(" %8s    %5s    %-11s\n","[Date]", "[Contribs]", "[Fill]");
 while(<>) {
 	while(/fill="#(.*)".* data-count="(.*)".* data-date="(.*)".*\/>/mgi) {
-		push @fiill, $1;
+		push @fill, $1;
 		push @contrib, $2;
 		my ($y, $m, $d) = (split '-', $3, 3);
 		$y = substr($y, 2, 2);
